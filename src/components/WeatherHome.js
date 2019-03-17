@@ -1,60 +1,57 @@
 import React, { Component } from 'react'
-import {View, Text, Image, StyleSheet} from 'react-native'
-import axios from 'axios'
+import {View, Text, Image, StyleSheet, AsyncStorage} from 'react-native'
 import Dimensions from 'Dimensions'
 
 import getPathIcon from '../Images'
 import CurrentDate from './CurrentDate'
 
-const {width, height} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window')
 
 export default class WeatherHome extends Component {
-
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      currentWeather: {},
-      temperature: 0,
-      icon: '',
-      statusText: ''
+      weatherData : {
+        weatherIcon : props.weather.weather[0].icon,
+        statusText : this._uppercaseFirstLetter(props.weather.weather[0].description),
+        weatherTemperature: Math.round(props.weather.main.temp),
+      }
     }
   } 
 
-  componentWillMount() {
-    this._getWeatherData()
-  }
-
-  _getWeatherData() {
-    axios.get("http://api.openweathermap.org/data/2.5/weather?q=vung%20tau,vn&units=metric&APPID=825b6253f970889b88af823e5bd09f20")
-    .then(res => this.setState({
-      currentWeather : res.data, 
-      temperature: Math.round(res.data.main.temp),
-      icon : res.data.weather[0].icon,
-      statusText: this._uppercaseFirstLetter(res.data.weather[0].description),
-      errorHandle : false
-    }))
-    .catch(err => this.setState({errorHandle : true}) )
-  }
+  // componentWillReceiveProps(nextProps){
+  //   if(nextProps.weather !== this.props.weather){
+  //     let parsed = JSON.stringify(nextProps.weather[0])
+  //     if(parsed !== undefined) {
+  //       this.setState((state, props) => ({
+  //         weatherData : {
+  //           ...state.weatherData, 
+  //           weatherTemperature : nextProps.weather[0].main.temp
+  //         }
+  //       }))
+  //     }  
+  //   }
+  // }
 
   _uppercaseFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
+    return string.charAt(0).toUpperCase() + string.slice(1) 
   }
 
   render() {  
-    let {temperature, icon, statusText} = this.state 
+    let {weatherTemperature, weatherIcon, statusText} = this.state.weatherData
     return (  
       <View style={styles.container}>
         <Text style={styles.appTitle}>SEA FOG APPLICATION</Text>
         <View style={styles.weatherDetail}>
           <View style={styles.weatherStatus} >
-            <Image style={styles.statusIcon} source={getPathIcon(icon)} />       
+            <Image style={styles.statusIcon} source={getPathIcon(weatherIcon)} />       
             <CurrentDate style={styles.statusDate}/>
           </View>
-          <Text style={styles.weatherTemperature}>{temperature}°C</Text>
+          <Text style={styles.weatherTemperature}>{weatherTemperature}°C</Text>
           <Text style={styles.statusText}>{statusText}</Text>
         </View>
       </View>
-    );
+    )
   }
 }
 
@@ -96,4 +93,4 @@ const styles = StyleSheet.create({
   weatherTemperature: {
     fontSize: 64,
   },
-});
+})

@@ -1,7 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, NetInfo  } from 'react-native'
-
-import backgound from './assets/seafog.jpg'
+import { AsyncStorage } from 'react-native'
 
 import Home from './src/components/Home'
 
@@ -9,50 +7,59 @@ export default class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      connectionType : 'none',
-      effectiveType : 'none'
+
     }
   }
 
   componentWillMount() {
-    this._checkNetworkConnection()
+    //this._checkNetworkConnection()
+    this._isDataExists()
   }
 
-  _checkNetworkConnection() {
-    NetInfo.getConnectionInfo().then((connectionInfo) => {
-      this.setState({
-        connectionType : connectionInfo.type,
-        effectiveType : connectionInfo.effectiveType
+  // _checkNetworkConnection() {
+  //   NetInfo.getConnectionInfo().then((connectionInfo) => {
+  //     this.setState({
+  //       connectionType : connectionInfo.type,
+  //       effectiveType : connectionInfo.effectiveType
+  //     })
+  //   });
+  // }
+
+  async _isDataExists(){
+    await AsyncStorage.getItem('DATA_OBJECT')
+      .then((value) => {
+        if (value === null) {
+          this._storeData()
+        }
       })
-    });
+      .catch(() => {
+        this.setState({
+          isError : true
+        })
+      })
   }
+
+  async _storeData(){
+    let newObject = {
+      city : 'Vung tau', 
+      units : 'metric',
+    }
+    await AsyncStorage.setItem('DATA_OBJECT', JSON.stringify(newObject))
+      .catch(() => {
+        this.setState({
+          isError : true
+        })
+      })
+  }
+
+
 
   render() {
-    if(this.state.connectionType !== "none") {
-      return (
-        <View style={styles.container}>
-          <ImageBackground source={backgound} style={styles.imageBackgound}>
-            <Home />
-          </ImageBackground>
-        </View>
-      )
-    } else {
-      return (
-        <View>
-          <Text>ERR</Text>
-        </View>
-      )
-    }
+    return (
+      <Home />
+    )
   }
 }
 
-const styles = StyleSheet.create({
-  container : {
-    paddingTop : 30
-  },
-  imageBackgound : {
-    width: '100%', 
-    height: '100%',
-  }
-});
+
 

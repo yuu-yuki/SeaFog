@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import {View, StyleSheet, FlatList, Text, Image} from 'react-native'
-import axios from 'axios'
+import {View, StyleSheet, FlatList, Text, Image, AsyncStorage} from 'react-native'
 
 import WeatherListItem from './WeatherListHourlyItem'
 
@@ -10,54 +9,26 @@ export default class WeatherList extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      weatherListHourly : [],
-      errorHandle : false
+      weatherListHourly : props.weatherList,
     }
-  }
-
-  componentWillMount() {
-    this._getWeatherData()
-  }
-
-  componentDidMount() {
-    
-  }
-
-  _getWeatherData() {
-    axios.get("http://api.openweathermap.org/data/2.5/forecast?q=vung%20tau,vn&units=metric&APPID=825b6253f970889b88af823e5bd09f20")
-    .then(res => this.setState({
-      weatherListHourly : res.data.list.slice(0, 6), 
-      errorHandle : false
-    }))
-    .catch(err => this.setState({errorHandle : true}) )
   }
   
   render() {
-    // Conditional when get weather error
     let {weatherListHourly} = this.state
-    if (this.state.errorHandle !== true) {
-      return (
-        <View style={styles.container}>
-          <View style={styles.containerTitle}>
-            <Image style={styles.iconTitle} source={iconTitle}/>
-            <Text style={styles.title}>Hourly Forecase</Text>
-          </View>
-          
-          <FlatList 
-            data={weatherListHourly}
-            renderItem={({item})=> <WeatherListItem weather={item} />}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>         
-      )
-    }
-    else {
-      return (
-        <View>
-
+    return (
+      <View style={styles.container}>
+        <View style={styles.containerTitle}>
+          <Image style={styles.iconTitle} source={iconTitle}/>
+          <Text style={styles.title}>Hourly Forecase</Text>
         </View>
-      )
-    }
+        
+        <FlatList 
+          data={weatherListHourly}
+          renderItem={({item})=> <WeatherListItem weather={item} />}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>         
+    )
   }
 }
 

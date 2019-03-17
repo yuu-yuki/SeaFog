@@ -7,9 +7,11 @@ export default class WeatherListItem extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      weatherIcon : props.weather.weather[0].icon,
-      weatherTime : this._convertTo12Hour(new Date(props.weather.dt * 1000).getHours()),
-      weatherTemperature: props.weather.main.temp,
+      weatherData: {
+        weatherIcon : props.weather.weather[0].icon,
+        weatherTime : this._convertTo12Hour(new Date(props.weather.dt * 1000).getHours()),
+        weatherTemperature: props.weather.main.temp,
+      }
     }
   }
 
@@ -17,13 +19,8 @@ export default class WeatherListItem extends Component {
     return time >= 12 ? (time-12) + " PM" : time + " AM"
   }
 
-  componentWillMount() {
-
-  }
-
-
   render() {
-    let {weatherIcon, weatherTime, weatherTemperature} = this.state
+    let {weatherIcon, weatherTime, weatherTemperature} = this.state.weatherData
     return(
       <View style={styles.container}>
         <Image style={styles.weatherIcon} source={getPathIcon(weatherIcon)} />
