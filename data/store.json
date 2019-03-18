@@ -1,0 +1,20 @@
+{
+  "units" : [
+    {
+      "label" : "°C",
+      "value" : "metric"
+    },{
+      "label" : "°F",
+      "value" : "imperial"
+    }
+  ],
+  "cities" : [
+    {
+      "label" : "Vũng Tàu",
+      "value" : "vung tau"
+    },{
+      "label" : "Hà Nội",
+      "value" : "ha noi"
+    }
+  ]
+}

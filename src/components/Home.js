@@ -8,6 +8,7 @@ import WeatherHome from './WeatherHome'
 import WeatherList from './WeatherListHourly'
 import WeatherChart from './WeatherChart'
 import WeatherConfig from './WeatherConfig'
+import Info from './Info'
 
 import backgound from '../../assets/seafog.jpg'
 import logo from '../../assets/logo.png'
@@ -81,6 +82,25 @@ export default class Home extends Component {
     })
   }
 
+  async _getState(appObject){
+    await this.setState(state => (
+        {
+          appObject : {...state.appObject, city : appObject.city, units : appObject.units}, 
+          isLoading: true,
+          isReady: false
+        }
+      )
+    )
+    await this._getWeatherData()
+    await setTimeout(() => {
+      if(!this.state.isLoading && !this.state.error.errorHandle) {
+        this.setState({isReady:true})
+      } else {
+        this.setState(state => ({error : {...state.error, errorHandle: true, text : 'Đang lấy dữ liệu thời tiết...'}}))
+      }
+    }, 3000)
+  }
+
   // Render
   render() {
     let {weatherData} = this.state
@@ -92,7 +112,7 @@ export default class Home extends Component {
           <ImageBackground source={backgound} style={styles.imageBackgound}>
           <Swiper loop={false} showsPagination={false} index={1} >
           {/* Swiper left - Weather Left */}
-          <View></View>
+          <Info/>
           <Swiper horizontal={false} loop={false} showsPagination={false} index={1} >
             {/* Swiper top - Weather Chart */}
             <WeatherChart weatherList={weatherData} />    
@@ -102,7 +122,7 @@ export default class Home extends Component {
             <WeatherList weatherList={weatherData.slice(0, 7)} />
           </Swiper> 
           {/* Swiper right - Weather Right */}
-          <WeatherConfig/>
+          <WeatherConfig appObject={this.state.appObject} getState={appObject => this._getState(appObject)}/>
         </Swiper>
           </ImageBackground>
         </View>  
