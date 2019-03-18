@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, Text, Image, StyleSheet, AsyncStorage} from 'react-native'
+import {View, Text, Image, StyleSheet} from 'react-native'
 import Dimensions from 'Dimensions'
 
 import getPathIcon from '../Images'
@@ -39,15 +39,17 @@ export default class WeatherHome extends Component {
 
   render() {  
     let {weatherTemperature, weatherIcon, statusText} = this.state.weatherData
+    let {showText} = this.props
     return (  
       <View style={styles.container}>
         <Text style={styles.appTitle}>SEA FOG APPLICATION</Text>
         <View style={styles.weatherDetail}>
           <View style={styles.weatherStatus} >
-            <Image style={styles.statusIcon} source={getPathIcon(weatherIcon)} />       
+            <Image style={styles.statusIcon} source={getPathIcon(weatherIcon)} />   
+            <Text style={styles.city}> {showText.city.label} - </Text>
             <CurrentDate style={styles.statusDate}/>
           </View>
-          <Text style={styles.weatherTemperature}>{weatherTemperature}°C</Text>
+          <Text style={styles.weatherTemperature}>{weatherTemperature}{showText.units.label}</Text>
           <Text style={styles.statusText}>{statusText}</Text>
         </View>
       </View>
@@ -80,6 +82,10 @@ const styles = StyleSheet.create({
     height: 32,
     width: 32,
     marginRight: 8
+  },
+  city : {
+    fontSize: 16,
+    fontWeight: '300'
   },
   statusDate : {
     fontSize: 16,

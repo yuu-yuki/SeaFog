@@ -27,8 +27,14 @@ export default class Home extends Component {
         text : ''
       },
       appObject : {
-        city : '',
-        units: ''
+        city : {
+          label: '',
+          value: ''
+        },
+        units: {
+          label: '',
+          value: ''
+        }
       }
     }
   }
@@ -59,7 +65,15 @@ export default class Home extends Component {
     await AsyncStorage.getItem('DATA_OBJECT')
       .then((value) => {
         let parsed = JSON.parse(value)
-        this.setState(state => ({appObject : {...state.appObject, city: parsed.city, units: parsed.units}}))
+        this.setState(state => (
+          {
+            appObject : {
+              ...state.appObject, 
+              city: parsed.city, 
+              units: parsed.units
+            }
+          }
+        ))
       })
       .catch(() => {
         this.setState(state => ({error : {...state.error, errorHandle: true, text : 'Không lấy được dữ liệu trong hệ thống.'}}))
@@ -71,8 +85,8 @@ export default class Home extends Component {
     let {city, units} = this.state.appObject
     await axios.get("http://api.openweathermap.org/data/2.5/forecast", {
       params : {
-        q : city,
-        units : units,
+        q : city.value,
+        units : units.value,
         APPID : '825b6253f970889b88af823e5bd09f20'
       }
     })
@@ -98,12 +112,12 @@ export default class Home extends Component {
       } else {
         this.setState(state => ({error : {...state.error, errorHandle: true, text : 'Đang lấy dữ liệu thời tiết...'}}))
       }
-    }, 3000)
+    }, 1000)
   }
 
   // Render
   render() {
-    let {weatherData} = this.state
+    let {weatherData, appObject} = this.state
     // Checking is data loading
     if(this.state.isReady) {
       // When data ready
@@ -117,12 +131,12 @@ export default class Home extends Component {
             {/* Swiper top - Weather Chart */}
             <WeatherChart weatherList={weatherData} />    
             {/* Swiper home - Weather Home */}
-            <WeatherHome weather={weatherData.slice(0,1)[0]}/>
+            <WeatherHome weather={weatherData.slice(0,1)[0]} showText={appObject}/>
             {/* Swiper down - Weather Hourly */}
             <WeatherList weatherList={weatherData.slice(0, 7)} />
           </Swiper> 
           {/* Swiper right - Weather Right */}
-          <WeatherConfig appObject={this.state.appObject} getState={appObject => this._getState(appObject)}/>
+          <WeatherConfig appObject={appObject} getState={appObject => this._getState(appObject)}/>
         </Swiper>
           </ImageBackground>
         </View>  

@@ -41,8 +41,14 @@ export default class App extends React.Component {
 
   async _storeData(){
     let newObject = {
-      city : 'Vung tau', 
-      units : 'metric',
+      city : {
+        label: 'Vũng tàu',
+        value: 'vung tau'
+      },
+      units : {
+        label: '°C',
+        value: 'metric'
+      }
     }
     await AsyncStorage.setItem('DATA_OBJECT', JSON.stringify(newObject))
       .catch(() => {

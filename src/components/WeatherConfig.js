@@ -12,8 +12,14 @@ export default class WeatherConfig extends Component {
     super(props)
     this.state = {
       appObject : {
-        city : '',
-        units: ''
+        city : {
+          label: '',
+          value: ''
+        },
+        units: {
+          label: '',
+          value: ''
+        }
       },
       isChanging : false
     }
@@ -38,19 +44,43 @@ export default class WeatherConfig extends Component {
 
   async _storeData(){
     let newObject = {
-      city : this.state.appObject.city, 
-      units : this.state.appObject.units,
+      city : {
+        label: this.state.appObject.city.label,
+        value: this.state.appObject.city.value
+      },
+      units : {
+        label: this.state.appObject.units.label,
+        value: this.state.appObject.units.value
+      }
     }
     await AsyncStorage.setItem('DATA_OBJECT', JSON.stringify(newObject))
   }
 
   async _storeCity(itemValue, itemIndex){
-    await this.setState(state => ({appObject : {...state.appObject, city: itemValue}}))
+    await cities.map((city, index) => {
+      if(index === itemIndex) {
+        this.setState(state => ({
+          appObject : {
+            ...state.appObject, 
+            city: city
+          }
+        }))
+      }
+    })
     await this._storeData()
   }
 
   async _storeUnit(itemValue, itemIndex){
-    await this.setState(state => ({appObject : {...state.appObject, units: itemValue}}))
+    await units.map((unit, index) => {
+      if(index === itemIndex) {
+        this.setState(state => ({
+          appObject : {
+            ...state.appObject, 
+            units: unit
+          }
+        }))
+      }
+    })
     await this._storeData()
   }
 
@@ -71,7 +101,7 @@ export default class WeatherConfig extends Component {
           <View style={styles.selectContainer}>
             <Text style={styles.selectTitle}>Select Cities</Text>
             <Picker
-              selectedValue={this.state.appObject.city}
+              selectedValue={this.state.appObject.city.value}
               onValueChange={(itemValue, itemIndex) =>this._storeCity(itemValue, itemIndex)}
             >
             {this._renderCities()}
@@ -80,7 +110,7 @@ export default class WeatherConfig extends Component {
           <View style={styles.selectContainer}>
             <Text style={styles.selectTitle}>Select Units</Text>
             <Picker
-              selectedValue={this.state.appObject.units}
+              selectedValue={this.state.appObject.units.value}
               onValueChange={(itemValue, itemIndex) =>this._storeUnit(itemValue, itemIndex)}
             >
             {this._renderUnits()}
