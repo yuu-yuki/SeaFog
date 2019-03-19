@@ -129,11 +129,11 @@ export default class Home extends Component {
           <Info/>
           <Swiper horizontal={false} loop={false} showsPagination={false} index={1} >
             {/* Swiper top - Weather Chart */}
-            <WeatherChart weatherList={weatherData} />    
+            <WeatherChart weatherList={weatherData} showText={appObject}/>    
             {/* Swiper home - Weather Home */}
             <WeatherHome weather={weatherData.slice(0,1)[0]} showText={appObject}/>
             {/* Swiper down - Weather Hourly */}
-            <WeatherList weatherList={weatherData.slice(0, 7)} />
+            <WeatherList weatherList={weatherData.slice(0, 7)} showText={appObject} />
           </Swiper> 
           {/* Swiper right - Weather Right */}
           <WeatherConfig appObject={appObject} getState={appObject => this._getState(appObject)}/>

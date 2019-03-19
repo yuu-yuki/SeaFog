@@ -25,7 +25,7 @@ export default class WeatherListItem extends Component {
       <View style={styles.container}>
         <Image style={styles.weatherIcon} source={getPathIcon(weatherIcon)} />
         <Text style={styles.weatherTime}>{weatherTime}</Text>
-        <Text style={styles.weatherTemperature}>{weatherTemperature}°C</Text>
+        <Text style={styles.weatherTemperature}>{weatherTemperature}{this.props.showUnit}</Text>
       </View>
     )
   }

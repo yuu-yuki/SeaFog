@@ -15,16 +15,17 @@ export default class WeatherList extends Component {
   
   render() {
     let {weatherListHourly} = this.state
+    let {showText} = this.props
     return (
       <View style={styles.container}>
         <View style={styles.containerTitle}>
           <Image style={styles.iconTitle} source={iconTitle}/>
-          <Text style={styles.title}>Hourly Forecase</Text>
+          <Text style={styles.title}>Hourly Forecast</Text>
         </View>
         
         <FlatList 
           data={weatherListHourly}
-          renderItem={({item})=> <WeatherListItem weather={item} />}
+          renderItem={({item})=> <WeatherListItem weather={item} showUnit={showText.units.label} />}
           keyExtractor={(item, index) => index.toString()}
         />
       </View>         

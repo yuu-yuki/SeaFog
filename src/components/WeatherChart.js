@@ -42,6 +42,7 @@ export default class WeatherChart extends Component {
       temps : this.state.weatherData.temps,
       dates : this.state.weatherData.dates
     } 
+    let {showText} = this.props
     let font = { fontSize: 12, fill: 'black' }
     return (
       <View style={styles.container}>
@@ -53,7 +54,7 @@ export default class WeatherChart extends Component {
             contentInset={{ top: 20, bottom: 20 }}
             svg={font}
             numberOfTicks={10}
-            formatLabel={value => `${value}ºC`}
+            formatLabel={value => `${value}${showText.units.label}`}
           />
           <LineChart
             style={{ flex: 1 }}

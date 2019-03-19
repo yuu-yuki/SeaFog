@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet, Picker, Dimensions, AsyncStorage, TouchableOpacity} from 'react-native'
-import { Card } from 'react-native-elements'
-import { Constants, LinearGradient } from 'expo'
+import { LinearGradient } from 'expo'
 
 import {units, cities} from '../../data/store.json'
 

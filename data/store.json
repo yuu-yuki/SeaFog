@@ -15,6 +15,12 @@
     },{
       "label" : "Hà Nội",
       "value" : "ha noi"
+    },{
+      "label" : "London",
+      "value" : "london"
+    },{
+      "label" : "Tokyo",
+      "value" : "tokyo"
     }
   ]
 }
